@@ -4,7 +4,7 @@ import noop from 'lodash-es/noop.js';
 import throttle from 'lodash-es/throttle.js';
 import React, { type ReactNode } from 'react';
 import type { FiberRoot } from 'react-reconciler';
-import { ConcurrentRoot } from 'react-reconciler/constants.js';
+import { LegacyRoot } from 'react-reconciler/constants.js';
 import { onExit } from 'signal-exit';
 import { flushInteractionTime } from 'src/bootstrap/state.js';
 import { getYogaCounters } from 'src/native-ts/yoga-layout/index.js';
@@ -177,6 +177,19 @@ export default class Ink {
     x: number;
     y: number;
   } | null = null;
+  private reportRenderError = (label: string, error: unknown): void => {
+    const message =
+      error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+    logForDebugging(`[Ink:${label}] ${message}`, {
+      level: 'error',
+    });
+    logError(error);
+    try {
+      this.options.stderr.write(`[Ink:${label}] ${message}\n`);
+    } catch {
+      // Best-effort fallback only.
+    }
+  };
   constructor(private readonly options: Options) {
     autoBind(this);
     if (this.options.patchConsole) {
@@ -259,13 +272,26 @@ export default class Ink {
 
     // @ts-expect-error @types/react-reconciler@0.32.3 declares 11 args with transitionCallbacks,
     // but react-reconciler 0.33.0 source only accepts 10 args (no transitionCallbacks)
-    this.container = reconciler.createContainer(this.rootNode, ConcurrentRoot, null, false, null, 'id', noop,
-    // onUncaughtError
-    noop,
-    // onCaughtError
-    noop,
-    // onRecoverableError
-    noop // onDefaultTransitionIndicator
+    this.container = reconciler.createContainer(
+      this.rootNode,
+      LegacyRoot,
+      null,
+      false,
+      null,
+      'id',
+      noop,
+      // onUncaughtError
+      error => {
+        this.reportRenderError('uncaught', error);
+      },
+      // onCaughtError
+      error => {
+        this.reportRenderError('caught', error);
+      },
+      // onRecoverableError
+      error => {
+        this.reportRenderError('recoverable', error);
+      }, // onDefaultTransitionIndicator
     );
     if ("production" === 'development') {
       reconciler.injectIntoDevTools({
@@ -1440,6 +1466,7 @@ export default class Ink {
     this.cursorDeclaration = decl;
   };
   render(node: ReactNode): void {
+    logForDebugging('[Ink:render] start');
     this.currentNode = node;
     const tree = <App stdin={this.options.stdin} stdout={this.options.stdout} stderr={this.options.stderr} exitOnCtrlC={this.options.exitOnCtrlC} onExit={this.unmount} terminalColumns={this.terminalColumns} terminalRows={this.terminalRows} selection={this.selection} onSelectionChange={this.notifySelectionChange} onClickAt={this.dispatchClick} onHoverAt={this.dispatchHover} getHyperlinkAt={this.getHyperlinkAt} onOpenHyperlink={this.openHyperlink} onMultiClick={this.handleMultiClick} onSelectionDrag={this.handleSelectionDrag} onStdinResume={this.reassertTerminalModes} onCursorDeclaration={this.setCursorDeclaration} dispatchKeyboardEvent={this.dispatchKeyboardEvent}>
         <TerminalWriteProvider value={this.writeRaw}>
@@ -1447,10 +1474,8 @@ export default class Ink {
         </TerminalWriteProvider>
       </App>;
 
-    // @ts-expect-error updateContainerSync exists in react-reconciler but not in @types/react-reconciler
-    reconciler.updateContainerSync(tree, this.container, null, noop);
-    // @ts-expect-error flushSyncWork exists in react-reconciler but not in @types/react-reconciler
-    reconciler.flushSyncWork();
+    reconciler.updateContainer(tree, this.container, null, noop);
+    logForDebugging('[Ink:render] updateContainer complete');
   }
   unmount(error?: Error | number | null): void {
     if (this.isUnmounted) {

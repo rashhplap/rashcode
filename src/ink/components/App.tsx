@@ -1,6 +1,5 @@
 import React, { PureComponent, type ReactNode } from 'react';
 import { updateLastInteractionTime } from '../../bootstrap/state.js';
-import { logForDebugging } from '../../utils/debug.js';
 import { stopCapturingEarlyInput } from '../../utils/earlyInput.js';
 import { isEnvTruthy } from '../../utils/envUtils.js';
 import { isMouseClicksDisabled } from '../../utils/fullscreen.js';
@@ -204,6 +203,7 @@ export default class App extends PureComponent<Props, State> {
     }
   }
   override componentDidCatch(error: Error) {
+    logError(error);
     this.handleExit(error);
   }
   handleSetRawMode = (isEnabled: boolean): void => {

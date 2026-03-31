@@ -106,7 +106,6 @@ const result = await Bun.build({
           'plist',
           'cacache',
           'fuse',
-          'auto-bind',
           'code-excerpt',
           'stack-utils',
         ]) {

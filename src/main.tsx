@@ -905,14 +905,7 @@ async function run(): Promise<CommanderCommand> {
   // Use preAction hook to run initialization only when executing a command,
   // not when displaying help. This avoids the need for env variable signaling.
   program.hook('preAction', async thisCommand => {
-    profileCheckpoint('preAction_start');
-    // Await async subprocess loads started at module evaluation (lines 12-20).
-    // Nearly free — subprocesses complete during the ~135ms of imports above.
-    // Must resolve before init() which triggers the first settings read
-    // (applySafeConfigEnvironmentVariables → getSettingsForSource('policySettings')
-    // → isRemoteManagedSettingsEligible → sync keychain reads otherwise ~65ms).
     await Promise.all([ensureMdmSettingsLoaded(), ensureKeychainPrefetchCompleted()]);
-    profileCheckpoint('preAction_after_mdm');
     await init();
     profileCheckpoint('preAction_after_init');
 
@@ -2236,10 +2229,8 @@ async function run(): Promise<CommanderCommand> {
         event: 'startup' as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS,
         durationMs: Math.round(process.uptime() * 1000)
       });
-      logForDebugging('[STARTUP] Running showSetupScreens()...');
       const setupScreensStart = Date.now();
       const onboardingShown = await showSetupScreens(root, permissionMode, allowDangerouslySkipPermissions, commands, enableClaudeInChrome, devChannels);
-      logForDebugging(`[STARTUP] showSetupScreens() completed in ${Date.now() - setupScreensStart}ms`);
 
       // Now that trust is established and GrowthBook has auth headers,
       // resolve the --remote-control / --rc entitlement gate.
@@ -2296,9 +2287,6 @@ async function run(): Promise<CommanderCommand> {
         });
       }
 
-      // Validate that the active token's org matches forceLoginOrgUUID (if set
-      // in managed settings). Runs after onboarding so managed settings and
-      // login state are fully loaded.
       const orgValidation = await validateForceLoginOrg();
       if (!orgValidation.valid) {
         await exitWithError(root, orgValidation.message);
@@ -2320,14 +2308,12 @@ async function run(): Promise<CommanderCommand> {
     // Must be after inline plugins are set (if any) so --plugin-dir LSP servers are included.
     initializeLspServerManager();
 
-    // Show settings validation errors after trust is established
-    // MCP config errors don't block settings from loading, so exclude them
     if (!isNonInteractiveSession) {
       const {
         errors
       } = getSettingsWithErrors();
       const nonMcpErrors = errors.filter(e => !e.mcpErrorMetadata);
-      if (nonMcpErrors.length > 0) {
+      if (nonMcpErrors.length > 0 && !isEnvTruthy(process.env.CLAUDE_CODE_USE_OPENAI)) {
         await launchInvalidSettingsDialog(root, {
           settingsErrors: nonMcpErrors,
           onExit: () => gracefulShutdownSync(1)
@@ -2336,8 +2322,6 @@ async function run(): Promise<CommanderCommand> {
     }
 
     // Check quota status, fast mode, passes eligibility, and bootstrap data
-    // after trust is established. These make API calls which could trigger
-    // apiKeyHelper execution.
     // --bare / SIMPLE: skip — these are cache-warms for the REPL's
     // first-turn responsiveness (quota, passes, fastMode, bootstrap data). Fast
     // mode doesn't apply to the Agent SDK anyway (see getFastModeUnavailableReason).
@@ -2377,11 +2361,9 @@ async function run(): Promise<CommanderCommand> {
       void refreshExampleCommands(); // Pre-fetch example commands (runs git log, no API call)
     }
 
-    // Resolve MCP configs (started early, overlaps with setup/trust dialog work)
     const {
       servers: existingMcpConfigs
     } = await mcpConfigPromise;
-    logForDebugging(`[STARTUP] MCP configs resolved in ${mcpConfigResolvedMs}ms (awaited at +${Date.now() - mcpConfigStart}ms)`);
     // CLI flag (--mcp-config) should override file-based configs, matching settings precedence
     const allMcpConfigs = {
       ...existingMcpConfigs,
@@ -3041,9 +3023,8 @@ async function run(): Promise<CommanderCommand> {
     }
     const initialTools = mcpTools;
 
-    // Increment numStartups synchronously — first-render readers like
-    // shouldShowEffortCallout (via useState initializer) need the updated
-    // value before setImmediate fires. Defer only telemetry.
+    // Keep startup bookkeeping best-effort so restricted environments can
+    // still reach the REPL even when the global config is not writable.
     saveGlobalConfig(current => ({
       ...current,
       numStartups: (current.numStartups ?? 0) + 1
@@ -3758,10 +3739,6 @@ async function run(): Promise<CommanderCommand> {
         });
       }
     } else {
-      // Pass unresolved hooks promise to REPL so it can render immediately
-      // instead of blocking ~500ms waiting for SessionStart hooks to finish.
-      // REPL will inject hook messages when they resolve and await them before
-      // the first API call so the model always sees hook context.
       const pendingHookMessages = hooksPromise && hookMessages.length === 0 ? hooksPromise : undefined;
       profileCheckpoint('action_after_hooks');
       maybeActivateProactive(options);

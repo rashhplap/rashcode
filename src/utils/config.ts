@@ -832,6 +832,14 @@ export function saveGlobalConfig(
       writeThroughGlobalConfigCache(written)
     }
   } catch (error) {
+    const code = getErrnoCode(error)
+    if (code === 'EACCES' || code === 'EPERM' || code === 'EROFS') {
+      logForDebugging(
+        `Skipping global config write due to permission error: ${error}`,
+        { level: 'error' },
+      )
+      return
+    }
     logForDebugging(`Failed to save config with lock: ${error}`, {
       level: 'error',
     })

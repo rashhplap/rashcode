@@ -596,6 +596,7 @@ export function REPL({
   sshSession,
   thinkingConfig
 }: Props): React.ReactNode {
+  logForDebugging('[REPL:render] function entry');
   const isRemoteSession = !!remoteSessionConfig;
 
   // Env-var gates hoisted to mount-time — isEnvTruthy does toLowerCase+trim+
