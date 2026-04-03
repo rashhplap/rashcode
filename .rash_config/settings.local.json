@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone:*)",
+      "Bash(mv repo/* .)",
+      "Bash(mv repo/.* .)",
+      "Bash(rm -rf repo)",
+      "Bash(mv \".claude\" \".rash\")",
+      "Bash(mv \"./src/commands/good-claude\" \"./src/commands/good-rash\")",
+      "Bash(mv \"./src/types/generated/events_mono/claude_code\" \"./src/types/generated/events_mono/rash_code\")",
+      "Bash(mv \"./src/utils/claudeInChrome\" \"./src/utils/rashInChrome\")",
+      "Bash(mv \"./vscode-extension/openclaude-vscode\" \"./vscode-extension/rashcode-vscode\")",
+      "Bash(npm whoami:*)",
+      "Bash(npm publish:*)",
+      "Bash(where bun:*)",
+      "Bash(bun run:*)",
+      "Bash(powershell -Command \"bun run scripts/build.ts\")",
+      "Bash(powershell -Command \"Get-Command bun -ErrorAction SilentlyContinue\")",
+      "Bash(powershell -Command '$env:PATH')",
+      "Bash(powershell -Command \"& '$env:USERPROFILE\\\\.bun\\\\bin\\\\bun.exe' --version\" 2>&1)",
+      "Bash(powershell -Command \"Get-ChildItem -Path $env:USERPROFILE -Filter 'bun*' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 FullName\" 2>&1)",
+      "Bash(powershell -Command \"where.exe bun\" 2>&1)",
+      "Bash(bun install:*)",
+      "Bash(powershell -Command \"bun install\")",
+      "Bash(mv src/services/claudeAiLimits.ts src/services/rashAiLimits.ts)",
+      "Bash(mv src/services/claudeAiLimitsHook.ts src/services/rashAiLimitsHook.ts)",
+      "Bash(mv bin/openclaude bin/rashcode)",
+      "Bash(mv src/services/api/claude.ts src/services/api/rash.ts)",
+      "Bash(mv src/skills/bundled/claudeApi.ts src/skills/bundled/rashApi.ts)",
+      "Bash(mv src/skills/bundled/claudeApiContent.ts src/skills/bundled/rashApiContent.ts)",
+      "Bash(mv src/skills/bundled/claudeInChrome.ts src/skills/bundled/rashInChrome.ts)"
+    ]
+  }
+}
