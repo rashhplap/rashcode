@@ -1,10 +1,10 @@
 {
-  "name": "@gitlawb/openclaude",
+  "name": "@rashhplap/rashcode",
   "version": "0.1.7",
-  "description": "Claude Code opened to any LLM — OpenAI, Gemini, DeepSeek, Ollama, and 200+ models",
+  "description": "Rash Code opened to any LLM — OpenAI, Gemini, DeepSeek, Ollama, and 200+ models",
   "type": "module",
   "bin": {
-    "openclaude": "./bin/openclaude"
+    "rashcode": "./bin/rashcode"
   },
   "files": [
     "bin/",
@@ -126,10 +126,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlawb.com/z6MkqDnb7Siv3Cwj7pGJq4T5EsUisECqR8KpnDLwcaZq5TPr/openclaude"
+    "url": "https://github.com/rashhplap/rashcode"
   },
   "keywords": [
-    "claude-code",
+    "rash-code",
     "openai",
     "llm",
     "cli",

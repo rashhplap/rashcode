@@ -1,8 +1,8 @@
 import { c as _c } from "react-compiler-runtime";
 import React, { useEffect, useMemo } from 'react';
 import type { CommandResultDisplay } from '../../commands.js';
-import { ClaudeAuthProvider } from '../../services/mcp/auth.js';
-import type { McpClaudeAIProxyServerConfig, McpHTTPServerConfig, McpSSEServerConfig, McpStdioServerConfig } from '../../services/mcp/types.js';
+import { RashAuthProvider } from '../../services/mcp/auth.js';
+import type { McpRashAIProxyServerConfig, McpHTTPServerConfig, McpSSEServerConfig, McpStdioServerConfig } from '../../services/mcp/types.js';
 import { extractAgentMcpServers, filterToolsByServer } from '../../services/mcp/utils.js';
 import { useAppState } from '../../state/AppState.js';
 import { getSessionIngressAuthToken } from '../../utils/sessionIngressAuth.js';
@@ -72,10 +72,10 @@ export function MCPSettings(t0) {
           const scope = client_0.config.scope;
           const isSSE = client_0.config.type === "sse";
           const isHTTP = client_0.config.type === "http";
-          const isClaudeAIProxy = client_0.config.type === "claudeai-proxy";
+          const isRashAIProxy = client_0.config.type === "rashai-proxy";
           let isAuthenticated = undefined;
           if (isSSE || isHTTP) {
-            const authProvider = new ClaudeAuthProvider(client_0.name, client_0.config as McpSSEServerConfig | McpHTTPServerConfig);
+            const authProvider = new RashAuthProvider(client_0.name, client_0.config as McpSSEServerConfig | McpHTTPServerConfig);
             const tokens = await authProvider.tokens();
             const hasSessionAuth = getSessionIngressAuthToken() !== null && client_0.type === "connected";
             const hasToolsAndConnected = client_0.type === "connected" && filterToolsByServer(mcp.tools, client_0.name).length > 0;
@@ -86,12 +86,12 @@ export function MCPSettings(t0) {
             client: client_0,
             scope
           };
-          if (isClaudeAIProxy) {
+          if (isRashAIProxy) {
             return {
               ...baseInfo,
-              transport: "claudeai-proxy" as const,
+              transport: "rashai-proxy" as const,
               isAuthenticated: false,
-              config: client_0.config as McpClaudeAIProxyServerConfig
+              config: client_0.config as McpRashAIProxyServerConfig
             };
           } else {
             if (isSSE) {
@@ -147,7 +147,7 @@ export function MCPSettings(t0) {
         return;
       }
       if (servers.length === 0 && agentMcpServers.length === 0) {
-        onComplete("No MCP servers configured. Please run /doctor if this is unexpected. Otherwise, run `claude mcp --help` or visit https://code.claude.com/docs/en/mcp to learn more.");
+        onComplete("No MCP servers configured. Please run /doctor if this is unexpected. Otherwise, run `rash mcp --help` or visit https://code.rash.com/docs/en/mcp to learn more.");
       }
     };
     t8 = [servers.length, filteredClients.length, agentMcpServers.length, onComplete];
@@ -207,7 +207,7 @@ export function MCPSettings(t0) {
           t9 = $[25];
         }
         const serverTools_0 = t9;
-        const defaultTab = viewState.server.transport === "claudeai-proxy" ? "claude.ai" : "Claude Code";
+        const defaultTab = viewState.server.transport === "rashai-proxy" ? "rash.ai" : "Rash Code";
         if (viewState.server.transport === "stdio") {
           let t10;
           if ($[26] !== viewState.server) {

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone:*)",
+      "Bash(mv repo/* .)",
+      "Bash(mv repo/.* .)",
+      "Bash(rm -rf repo)",
+      "Bash(mv \".claude\" \".rash\")",
+      "Bash(mv \"./src/commands/good-claude\" \"./src/commands/good-rash\")",
+      "Bash(mv \"./src/types/generated/events_mono/claude_code\" \"./src/types/generated/events_mono/rash_code\")",
+      "Bash(mv \"./src/utils/claudeInChrome\" \"./src/utils/rashInChrome\")",
+      "Bash(mv \"./vscode-extension/openclaude-vscode\" \"./vscode-extension/rashcode-vscode\")"
+    ]
+  }
+}

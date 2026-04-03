@@ -1,0 +1,129 @@
+{
+  "name": "rashcode-vscode",
+  "displayName": "rashcode",
+  "description": "Practical VS Code companion for rashcode with project-aware launch behavior and a real Control Center.",
+  "version": "0.1.1",
+  "publisher": "devnull-bootloader",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Themes",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:rashcode.start",
+    "onCommand:rashcode.startInWorkspaceRoot",
+    "onCommand:rashcode.openDocs",
+    "onCommand:rashcode.openSetupDocs",
+    "onCommand:rashcode.openWorkspaceProfile",
+    "onCommand:rashcode.openControlCenter",
+    "onView:rashcode.controlCenter"
+  ],
+  "main": "./src/extension.js",
+  "files": [
+    "README.md",
+    "media/**",
+    "src/extension.js",
+    "src/presentation.js",
+    "src/state.js",
+    "themes/**"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "rashcode.start",
+        "title": "rashcode: Launch in Terminal",
+        "category": "rashcode"
+      },
+      {
+        "command": "rashcode.startInWorkspaceRoot",
+        "title": "rashcode: Launch in Workspace Root",
+        "category": "rashcode"
+      },
+      {
+        "command": "rashcode.openDocs",
+        "title": "rashcode: Open Repository",
+        "category": "rashcode"
+      },
+      {
+        "command": "rashcode.openSetupDocs",
+        "title": "rashcode: Open Setup Guide",
+        "category": "rashcode"
+      },
+      {
+        "command": "rashcode.openWorkspaceProfile",
+        "title": "rashcode: Open Workspace Profile",
+        "category": "rashcode"
+      },
+      {
+        "command": "rashcode.openControlCenter",
+        "title": "rashcode: Open Control Center",
+        "category": "rashcode"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "rashcode",
+          "title": "rashcode",
+          "icon": "media/rashcode.svg"
+        }
+      ]
+    },
+    "views": {
+      "rashcode": [
+        {
+          "id": "rashcode.controlCenter",
+          "name": "Control Center",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "rashcode",
+      "properties": {
+        "rashcode.launchCommand": {
+          "type": "string",
+          "default": "rashcode",
+          "description": "Command run in the integrated terminal when launching rashcode."
+        },
+        "rashcode.terminalName": {
+          "type": "string",
+          "default": "rashcode",
+          "description": "Integrated terminal tab name for rashcode sessions."
+        },
+        "rashcode.useOpenAIShim": {
+          "type": "boolean",
+          "default": false,
+          "description": "Optionally set RASH_CODE_USE_OPENAI=1 in launched rashcode terminals."
+        }
+      }
+    },
+    "themes": [
+      {
+        "label": "rashcode Terminal Black",
+        "uiTheme": "vs-dark",
+        "path": "./themes/rashcode-Terminal-Black.json"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node --test ./src/*.test.js",
+    "lint": "node -e \"for (const file of require('node:fs').readdirSync('./src')) { if (file.endsWith('.js')) { require('node:child_process').execFileSync(process.execPath, ['--check', require('node:path').join('src', file)], { stdio: 'inherit' }); } }\"",
+    "package": "npx @vscode/vsce package --no-dependencies"
+  },
+  "keywords": [
+    "rashcode",
+    "terminal",
+    "theme",
+    "cli",
+    "llm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rashhplap/rashcode"
+  },
+  "license": "MIT"
+}

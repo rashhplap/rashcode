@@ -6,30 +6,30 @@ import {
 } from './providers.js'
 
 const originalEnv = {
-  CLAUDE_CODE_USE_GEMINI: process.env.CLAUDE_CODE_USE_GEMINI,
-  CLAUDE_CODE_USE_GITHUB: process.env.CLAUDE_CODE_USE_GITHUB,
-  CLAUDE_CODE_USE_OPENAI: process.env.CLAUDE_CODE_USE_OPENAI,
-  CLAUDE_CODE_USE_BEDROCK: process.env.CLAUDE_CODE_USE_BEDROCK,
-  CLAUDE_CODE_USE_VERTEX: process.env.CLAUDE_CODE_USE_VERTEX,
-  CLAUDE_CODE_USE_FOUNDRY: process.env.CLAUDE_CODE_USE_FOUNDRY,
+  RASH_CODE_USE_GEMINI: process.env.RASH_CODE_USE_GEMINI,
+  RASH_CODE_USE_GITHUB: process.env.RASH_CODE_USE_GITHUB,
+  RASH_CODE_USE_OPENAI: process.env.RASH_CODE_USE_OPENAI,
+  RASH_CODE_USE_BEDROCK: process.env.RASH_CODE_USE_BEDROCK,
+  RASH_CODE_USE_VERTEX: process.env.RASH_CODE_USE_VERTEX,
+  RASH_CODE_USE_FOUNDRY: process.env.RASH_CODE_USE_FOUNDRY,
 }
 
 afterEach(() => {
-  process.env.CLAUDE_CODE_USE_GEMINI = originalEnv.CLAUDE_CODE_USE_GEMINI
-  process.env.CLAUDE_CODE_USE_GITHUB = originalEnv.CLAUDE_CODE_USE_GITHUB
-  process.env.CLAUDE_CODE_USE_OPENAI = originalEnv.CLAUDE_CODE_USE_OPENAI
-  process.env.CLAUDE_CODE_USE_BEDROCK = originalEnv.CLAUDE_CODE_USE_BEDROCK
-  process.env.CLAUDE_CODE_USE_VERTEX = originalEnv.CLAUDE_CODE_USE_VERTEX
-  process.env.CLAUDE_CODE_USE_FOUNDRY = originalEnv.CLAUDE_CODE_USE_FOUNDRY
+  process.env.RASH_CODE_USE_GEMINI = originalEnv.RASH_CODE_USE_GEMINI
+  process.env.RASH_CODE_USE_GITHUB = originalEnv.RASH_CODE_USE_GITHUB
+  process.env.RASH_CODE_USE_OPENAI = originalEnv.RASH_CODE_USE_OPENAI
+  process.env.RASH_CODE_USE_BEDROCK = originalEnv.RASH_CODE_USE_BEDROCK
+  process.env.RASH_CODE_USE_VERTEX = originalEnv.RASH_CODE_USE_VERTEX
+  process.env.RASH_CODE_USE_FOUNDRY = originalEnv.RASH_CODE_USE_FOUNDRY
 })
 
 function clearProviderEnv(): void {
-  delete process.env.CLAUDE_CODE_USE_GEMINI
-  delete process.env.CLAUDE_CODE_USE_GITHUB
-  delete process.env.CLAUDE_CODE_USE_OPENAI
-  delete process.env.CLAUDE_CODE_USE_BEDROCK
-  delete process.env.CLAUDE_CODE_USE_VERTEX
-  delete process.env.CLAUDE_CODE_USE_FOUNDRY
+  delete process.env.RASH_CODE_USE_GEMINI
+  delete process.env.RASH_CODE_USE_GITHUB
+  delete process.env.RASH_CODE_USE_OPENAI
+  delete process.env.RASH_CODE_USE_BEDROCK
+  delete process.env.RASH_CODE_USE_VERTEX
+  delete process.env.RASH_CODE_USE_FOUNDRY
 }
 
 test('first-party provider keeps Anthropic account setup flow enabled', () => {
@@ -40,12 +40,12 @@ test('first-party provider keeps Anthropic account setup flow enabled', () => {
 })
 
 test.each([
-  ['CLAUDE_CODE_USE_OPENAI', 'openai'],
-  ['CLAUDE_CODE_USE_GITHUB', 'github'],
-  ['CLAUDE_CODE_USE_GEMINI', 'gemini'],
-  ['CLAUDE_CODE_USE_BEDROCK', 'bedrock'],
-  ['CLAUDE_CODE_USE_VERTEX', 'vertex'],
-  ['CLAUDE_CODE_USE_FOUNDRY', 'foundry'],
+  ['RASH_CODE_USE_OPENAI', 'openai'],
+  ['RASH_CODE_USE_GITHUB', 'github'],
+  ['RASH_CODE_USE_GEMINI', 'gemini'],
+  ['RASH_CODE_USE_BEDROCK', 'bedrock'],
+  ['RASH_CODE_USE_VERTEX', 'vertex'],
+  ['RASH_CODE_USE_FOUNDRY', 'foundry'],
 ] as const)(
   '%s disables Anthropic account setup flow',
   (envKey, provider) => {
@@ -59,8 +59,8 @@ test.each([
 
 test('GEMINI takes precedence over GitHub when both are set', () => {
   clearProviderEnv()
-  process.env.CLAUDE_CODE_USE_GEMINI = '1'
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
+  process.env.RASH_CODE_USE_GEMINI = '1'
+  process.env.RASH_CODE_USE_GITHUB = '1'
 
   expect(getAPIProvider()).toBe('gemini')
 })

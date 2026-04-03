@@ -6,7 +6,7 @@ import { getAPIProvider } from 'src/utils/model/providers.js'
 import type { PermissionResult } from 'src/utils/permissions/PermissionResult.js'
 import { z } from 'zod/v4'
 import { getFeatureValue_CACHED_MAY_BE_STALE } from '../../services/analytics/growthbook.js'
-import { queryModelWithStreaming } from '../../services/api/claude.js'
+import { queryModelWithStreaming } from '../../services/api/rash.js'
 import { collectCodexCompletedResponse } from '../../services/api/codexShim.js'
 import {
   resolveCodexApiCredentials,
@@ -212,7 +212,7 @@ function buildCodexWebSearchInput(input: Input): Array<Record<string, unknown>> 
 
 function buildCodexWebSearchInstructions(): string {
   return [
-    'You are the OpenClaude web search tool.',
+    'You are the rashcode web search tool.',
     'Search the web for the user query and return a concise factual answer.',
     'Include source URLs in the response.',
   ].join(' ')
@@ -336,7 +336,7 @@ async function runCodexWebSearch(
       'Content-Type': 'application/json',
       Authorization: `Bearer ${credentials.apiKey}`,
       'chatgpt-account-id': credentials.accountId,
-      originator: 'openclaude',
+      originator: 'rashcode',
     },
     body: JSON.stringify(body),
     signal,
@@ -428,7 +428,7 @@ export const WebSearchTool = buildTool({
   maxResultSizeChars: 100_000,
   shouldDefer: true,
   async description(input) {
-    return `Claude wants to search the web for: ${input.query}`
+    return `Rash wants to search the web for: ${input.query}`
   },
   userFacingName() {
     return 'Web Search'
@@ -455,12 +455,12 @@ export const WebSearchTool = buildTool({
       return true
     }
 
-    // Enable for Vertex AI with supported models (Claude 4.0+)
+    // Enable for Vertex AI with supported models (Rash 4.0+)
     if (provider === 'vertex') {
       const supportsWebSearch =
-        model.includes('claude-opus-4') ||
-        model.includes('claude-sonnet-4') ||
-        model.includes('claude-haiku-4')
+        model.includes('rash-opus-4') ||
+        model.includes('rash-sonnet-4') ||
+        model.includes('rash-haiku-4')
 
       return supportsWebSearch
     }

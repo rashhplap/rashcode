@@ -16,7 +16,7 @@ process.env.COREPACK_ENABLE_AUTO_PIN = '0';
 
 // Set max heap size for child processes in CCR environments (containers have 16GB)
 // eslint-disable-next-line custom-rules/no-top-level-side-effects, custom-rules/no-process-env-top-level, custom-rules/safe-env-boolean-check
-if (process.env.CLAUDE_CODE_REMOTE === 'true') {
+if (process.env.RASH_CODE_REMOTE === 'true') {
   // eslint-disable-next-line custom-rules/no-top-level-side-effects, custom-rules/no-process-env-top-level
   const existing = process.env.NODE_OPTIONS || '';
   // eslint-disable-next-line custom-rules/no-top-level-side-effects, custom-rules/no-process-env-top-level
@@ -28,8 +28,8 @@ if (process.env.CLAUDE_CODE_REMOTE === 'true') {
 // module-level consts at import time — init() runs too late. feature() gate
 // DCEs this entire block from external builds.
 // eslint-disable-next-line custom-rules/no-top-level-side-effects, custom-rules/no-process-env-top-level
-if (feature('ABLATION_BASELINE') && process.env.CLAUDE_CODE_ABLATION_BASELINE) {
-  for (const k of ['CLAUDE_CODE_SIMPLE', 'CLAUDE_CODE_DISABLE_THINKING', 'DISABLE_INTERLEAVED_THINKING', 'DISABLE_COMPACT', 'DISABLE_AUTO_COMPACT', 'CLAUDE_CODE_DISABLE_AUTO_MEMORY', 'CLAUDE_CODE_DISABLE_BACKGROUND_TASKS']) {
+if (feature('ABLATION_BASELINE') && process.env.RASH_CODE_ABLATION_BASELINE) {
+  for (const k of ['RASH_CODE_SIMPLE', 'RASH_CODE_DISABLE_THINKING', 'DISABLE_INTERLEAVED_THINKING', 'DISABLE_COMPACT', 'DISABLE_AUTO_COMPACT', 'RASH_CODE_DISABLE_AUTO_MEMORY', 'RASH_CODE_DISABLE_BACKGROUND_TASKS']) {
     // eslint-disable-next-line custom-rules/no-top-level-side-effects, custom-rules/no-process-env-top-level
     process.env[k] ??= '1';
   }
@@ -44,12 +44,12 @@ function isEnvTruthy(value: string | undefined): boolean {
 function getProviderValidationError(
   env: NodeJS.ProcessEnv = process.env,
 ): string | null {
-  const useOpenAI = isEnvTruthy(env.CLAUDE_CODE_USE_OPENAI)
-  const useGithub = isEnvTruthy(env.CLAUDE_CODE_USE_GITHUB)
+  const useOpenAI = isEnvTruthy(env.RASH_CODE_USE_OPENAI)
+  const useGithub = isEnvTruthy(env.RASH_CODE_USE_GITHUB)
 
-  if (isEnvTruthy(env.CLAUDE_CODE_USE_GEMINI)) {
+  if (isEnvTruthy(env.RASH_CODE_USE_GEMINI)) {
     if (!(env.GEMINI_API_KEY ?? env.GOOGLE_API_KEY)) {
-      return 'GEMINI_API_KEY is required when CLAUDE_CODE_USE_GEMINI=1.'
+      return 'GEMINI_API_KEY is required when RASH_CODE_USE_GEMINI=1.'
     }
     return null
   }
@@ -57,7 +57,7 @@ function getProviderValidationError(
   if (useGithub && !useOpenAI) {
     const token = (env.GITHUB_TOKEN?.trim() || env.GH_TOKEN?.trim()) ?? ''
     if (!token) {
-      return 'GITHUB_TOKEN or GH_TOKEN is required when CLAUDE_CODE_USE_GITHUB=1.'
+      return 'GITHUB_TOKEN or GH_TOKEN is required when RASH_CODE_USE_GITHUB=1.'
     }
     return null
   }
@@ -97,7 +97,7 @@ function getProviderValidationError(
     if (useGithub && hasGithubToken) {
       return null
     }
-    return 'OPENAI_API_KEY is required when CLAUDE_CODE_USE_OPENAI=1 and OPENAI_BASE_URL is not local.'
+    return 'OPENAI_API_KEY is required when RASH_CODE_USE_OPENAI=1 and OPENAI_BASE_URL is not local.'
   }
 
   return null
@@ -123,7 +123,7 @@ async function main(): Promise<void> {
   if (args.length === 1 && (args[0] === '--version' || args[0] === '-v' || args[0] === '-V')) {
     // MACRO.VERSION is inlined at build time
     // biome-ignore lint/suspicious/noConsole:: intentional console output
-    console.log(`${MACRO.DISPLAY_VERSION ?? MACRO.VERSION} (Open Claude)`);
+    console.log(`${MACRO.DISPLAY_VERSION ?? MACRO.VERSION} (Open Rash)`);
     return;
   }
 
@@ -184,18 +184,18 @@ async function main(): Promise<void> {
     console.log(prompt.join('\n'));
     return;
   }
-  if (process.argv[2] === '--claude-in-chrome-mcp') {
-    profileCheckpoint('cli_claude_in_chrome_mcp_path');
+  if (process.argv[2] === '--rash-in-chrome-mcp') {
+    profileCheckpoint('cli_rash_in_chrome_mcp_path');
     const {
-      runClaudeInChromeMcpServer
-    } = await import('../utils/claudeInChrome/mcpServer.js');
-    await runClaudeInChromeMcpServer();
+      runRashInChromeMcpServer
+    } = await import('../utils/rashInChrome/mcpServer.js');
+    await runRashInChromeMcpServer();
     return;
   } else if (process.argv[2] === '--chrome-native-host') {
     profileCheckpoint('cli_chrome_native_host_path');
     const {
       runChromeNativeHost
-    } = await import('../utils/claudeInChrome/chromeNativeHost.js');
+    } = await import('../utils/rashInChrome/chromeNativeHost.js');
     await runChromeNativeHost();
     return;
   } else if (feature('CHICAGO_MCP') && process.argv[2] === '--computer-use-mcp') {
@@ -220,7 +220,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  // Fast-path for `claude remote-control` (also accepts legacy `claude remote` / `claude sync` / `claude bridge`):
+  // Fast-path for `rash remote-control` (also accepts legacy `rash remote` / `rash sync` / `rash bridge`):
   // serve local machine as bridge environment.
   // feature() must stay inline for build-time dead code elimination;
   // isBridgeEnabled() checks the runtime GrowthBook gate.
@@ -249,9 +249,9 @@ async function main(): Promise<void> {
     // getBridgeDisabledReason awaits GB init, so the returned value is fresh
     // (not the stale disk cache), but init still needs auth headers to work.
     const {
-      getClaudeAIOAuthTokens
+      getRashAIOAuthTokens
     } = await import('../utils/auth.js');
-    if (!getClaudeAIOAuthTokens()?.accessToken) {
+    if (!getRashAIOAuthTokens()?.accessToken) {
       exitWithError(BRIDGE_LOGIN_ERROR);
     }
     const disabledReason = await getBridgeDisabledReason();
@@ -276,7 +276,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  // Fast-path for `claude daemon [subcommand]`: long-running supervisor.
+  // Fast-path for `rash daemon [subcommand]`: long-running supervisor.
   if (feature('DAEMON') && args[0] === 'daemon') {
     profileCheckpoint('cli_daemon_path');
     const {
@@ -294,8 +294,8 @@ async function main(): Promise<void> {
     return;
   }
 
-  // Fast-path for `claude ps|logs|attach|kill` and `--bg`/`--background`.
-  // Session management against the ~/.claude/sessions/ registry. Flag
+  // Fast-path for `rash ps|logs|attach|kill` and `--bg`/`--background`.
+  // Session management against the ~/.rash/sessions/ registry. Flag
   // literals are inlined so bg.js only loads when actually dispatching.
   if (feature('BG_SESSIONS') && (args[0] === 'ps' || args[0] === 'logs' || args[0] === 'attach' || args[0] === 'kill' || args.includes('--bg') || args.includes('--background'))) {
     profileCheckpoint('cli_bg_path');
@@ -336,7 +336,7 @@ async function main(): Promise<void> {
     process.exit(0);
   }
 
-  // Fast-path for `claude environment-runner`: headless BYOC runner.
+  // Fast-path for `rash environment-runner`: headless BYOC runner.
   // feature() must stay inline for build-time dead code elimination.
   if (feature('BYOC_ENVIRONMENT_RUNNER') && args[0] === 'environment-runner') {
     profileCheckpoint('cli_environment_runner_path');
@@ -347,7 +347,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  // Fast-path for `claude self-hosted-runner`: headless self-hosted-runner
+  // Fast-path for `rash self-hosted-runner`: headless self-hosted-runner
   // targeting the SelfHostedRunnerWorkerService API (register + poll; poll IS
   // heartbeat). feature() must stay inline for build-time dead code elimination.
   if (feature('SELF_HOSTED_RUNNER') && args[0] === 'self-hosted-runner') {
@@ -396,7 +396,7 @@ async function main(): Promise<void> {
   // --bare: set SIMPLE early so gates fire during module eval / commander
   // option building (not just inside the action handler).
   if (args.includes('--bare')) {
-    process.env.CLAUDE_CODE_SIMPLE = '1';
+    process.env.RASH_CODE_SIMPLE = '1';
   }
 
   // --provider: set provider env vars early, before main module loads.
@@ -416,7 +416,7 @@ async function main(): Promise<void> {
   }
 
   // No special flags detected, load and run the full CLI
-  if (process.env.OPENCLAUDE_ENABLE_EARLY_INPUT === '1') {
+  if (process.env.rashcode_ENABLE_EARLY_INPUT === '1') {
     const {
       startCapturingEarlyInput
     } = await import('../utils/earlyInput.js');

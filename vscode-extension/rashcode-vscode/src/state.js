@@ -340,27 +340,27 @@ function describeProviderState({ shimEnabled, env, profile }) {
     return describeSavedProfile(profile);
   }
 
-  if (isEnvTruthy(env.CLAUDE_CODE_USE_GEMINI)) {
+  if (isEnvTruthy(env.RASH_CODE_USE_GEMINI)) {
     return buildProviderState('Gemini', getDetail(env, 'from environment'), 'env');
   }
 
-  if (isEnvTruthy(env.CLAUDE_CODE_USE_GITHUB)) {
+  if (isEnvTruthy(env.RASH_CODE_USE_GITHUB)) {
     return buildProviderState('GitHub Models', getDetail(env, 'from environment'), 'env');
   }
 
-  if (isEnvTruthy(env.CLAUDE_CODE_USE_BEDROCK)) {
+  if (isEnvTruthy(env.RASH_CODE_USE_BEDROCK)) {
     return buildProviderState('Bedrock', 'from environment', 'env');
   }
 
-  if (isEnvTruthy(env.CLAUDE_CODE_USE_VERTEX)) {
+  if (isEnvTruthy(env.RASH_CODE_USE_VERTEX)) {
     return buildProviderState('Vertex AI', 'from environment', 'env');
   }
 
-  if (isEnvTruthy(env.CLAUDE_CODE_USE_FOUNDRY)) {
+  if (isEnvTruthy(env.RASH_CODE_USE_FOUNDRY)) {
     return buildProviderState('Foundry', 'from environment', 'env');
   }
 
-  if (isEnvTruthy(env.CLAUDE_CODE_USE_OPENAI)) {
+  if (isEnvTruthy(env.RASH_CODE_USE_OPENAI)) {
     return describeOpenAICompatible(env, 'env');
   }
 

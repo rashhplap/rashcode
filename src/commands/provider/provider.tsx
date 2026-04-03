@@ -143,7 +143,7 @@ export function buildCurrentProviderSummary(options?: {
   const persisted = options?.persisted ?? loadProfileFile()
   const savedProfileLabel = persisted?.profile ?? 'none'
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_GEMINI)) {
+  if (isEnvTruthy(processEnv.RASH_CODE_USE_GEMINI)) {
     return {
       providerLabel: 'Google Gemini',
       modelLabel: getSafeDisplayValue(
@@ -158,7 +158,7 @@ export function buildCurrentProviderSummary(options?: {
     }
   }
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_OPENAI)) {
+  if (isEnvTruthy(processEnv.RASH_CODE_USE_OPENAI)) {
     const request = resolveProviderRequest({
       model: processEnv.OPENAI_MODEL,
       baseUrl: processEnv.OPENAI_BASE_URL,
@@ -185,8 +185,8 @@ export function buildCurrentProviderSummary(options?: {
     providerLabel: 'Anthropic',
     modelLabel: getSafeDisplayValue(
       processEnv.ANTHROPIC_MODEL ??
-        processEnv.CLAUDE_MODEL ??
-        'claude-sonnet-4-6',
+        processEnv.RASH_MODEL ??
+        'rash-sonnet-4-6',
       processEnv,
     ),
     endpointLabel: getSafeDisplayValue(
@@ -291,7 +291,7 @@ export function buildProfileSaveMessage(
   }
 
   lines.push(`Profile: ${filePath}`)
-  lines.push('Restart OpenClaude to use it.')
+  lines.push('Restart rashcode to use it.')
 
   return lines.join('\n')
 }
@@ -308,7 +308,7 @@ function buildUsageText(): string {
     `Current endpoint: ${summary.endpointLabel}`,
     `Saved profile: ${summary.savedProfileLabel}`,
     '',
-    'Choose Auto, Ollama, OpenAI-compatible, Gemini, or Codex, then save a profile for the next OpenClaude restart.',
+    'Choose Auto, Ollama, OpenAI-compatible, Gemini, or Codex, then save a profile for the next rashcode restart.',
   ].join('\n')
 }
 
@@ -440,7 +440,7 @@ function ProviderChooser({
     options.push({
       label: 'Clear saved profile',
       value: 'clear',
-      description: 'Remove .openclaude-profile.json and return to normal startup',
+      description: 'Remove .rashcode-profile.json and return to normal startup',
     })
   }
 
@@ -452,7 +452,7 @@ function ProviderChooser({
     >
       <Box flexDirection="column" gap={1}>
         <Text>
-          Save a provider profile for the next OpenClaude restart without
+          Save a provider profile for the next rashcode restart without
           editing environment variables first.
         </Text>
         <Box flexDirection="column">
@@ -929,7 +929,7 @@ export function ProviderWizard({
               setStep({ name: 'gemini-key' })
             } else if (value === 'clear') {
               const filePath = deleteProfileFile()
-              onDone(`Removed saved provider profile at ${filePath}. Restart OpenClaude to go back to normal startup.`, {
+              onDone(`Removed saved provider profile at ${filePath}. Restart rashcode to go back to normal startup.`, {
                 display: 'system',
               })
             } else {

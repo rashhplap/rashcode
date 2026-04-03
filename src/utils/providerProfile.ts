@@ -14,17 +14,17 @@ import {
 } from './providerRecommendation.ts'
 import { getOllamaChatBaseUrl } from './providerDiscovery.ts'
 
-export const PROFILE_FILE_NAME = '.openclaude-profile.json'
+export const PROFILE_FILE_NAME = '.rashcode-profile.json'
 export const DEFAULT_GEMINI_BASE_URL =
   'https://generativelanguage.googleapis.com/v1beta/openai'
 export const DEFAULT_GEMINI_MODEL = 'gemini-2.0-flash'
 
 const PROFILE_ENV_KEYS = [
-  'CLAUDE_CODE_USE_OPENAI',
-  'CLAUDE_CODE_USE_GEMINI',
-  'CLAUDE_CODE_USE_BEDROCK',
-  'CLAUDE_CODE_USE_VERTEX',
-  'CLAUDE_CODE_USE_FOUNDRY',
+  'RASH_CODE_USE_OPENAI',
+  'RASH_CODE_USE_GEMINI',
+  'RASH_CODE_USE_BEDROCK',
+  'RASH_CODE_USE_VERTEX',
+  'RASH_CODE_USE_FOUNDRY',
   'OPENAI_BASE_URL',
   'OPENAI_MODEL',
   'OPENAI_API_KEY',
@@ -398,12 +398,12 @@ export function hasExplicitProviderSelection(
   processEnv: NodeJS.ProcessEnv = process.env,
 ): boolean {
   return (
-    processEnv.CLAUDE_CODE_USE_OPENAI !== undefined ||
-    processEnv.CLAUDE_CODE_USE_GITHUB !== undefined ||
-    processEnv.CLAUDE_CODE_USE_GEMINI !== undefined ||
-    processEnv.CLAUDE_CODE_USE_BEDROCK !== undefined ||
-    processEnv.CLAUDE_CODE_USE_VERTEX !== undefined ||
-    processEnv.CLAUDE_CODE_USE_FOUNDRY !== undefined
+    processEnv.RASH_CODE_USE_OPENAI !== undefined ||
+    processEnv.RASH_CODE_USE_GITHUB !== undefined ||
+    processEnv.RASH_CODE_USE_GEMINI !== undefined ||
+    processEnv.RASH_CODE_USE_BEDROCK !== undefined ||
+    processEnv.RASH_CODE_USE_VERTEX !== undefined ||
+    processEnv.RASH_CODE_USE_FOUNDRY !== undefined
   )
 }
 
@@ -469,11 +469,11 @@ export async function buildLaunchEnv(options: {
   if (options.profile === 'gemini') {
     const env: NodeJS.ProcessEnv = {
       ...processEnv,
-      CLAUDE_CODE_USE_GEMINI: '1',
+      RASH_CODE_USE_GEMINI: '1',
     }
 
-    delete env.CLAUDE_CODE_USE_OPENAI
-    delete env.CLAUDE_CODE_USE_GITHUB
+    delete env.RASH_CODE_USE_OPENAI
+    delete env.RASH_CODE_USE_GITHUB
 
     env.GEMINI_MODEL =
       shellGeminiModel ||
@@ -504,11 +504,11 @@ export async function buildLaunchEnv(options: {
 
   const env: NodeJS.ProcessEnv = {
     ...processEnv,
-    CLAUDE_CODE_USE_OPENAI: '1',
+    RASH_CODE_USE_OPENAI: '1',
   }
 
-  delete env.CLAUDE_CODE_USE_GEMINI
-  delete env.CLAUDE_CODE_USE_GITHUB
+  delete env.RASH_CODE_USE_GEMINI
+  delete env.RASH_CODE_USE_GITHUB
   delete env.GEMINI_API_KEY
   delete env.GEMINI_MODEL
   delete env.GEMINI_BASE_URL
@@ -640,7 +640,7 @@ export async function buildStartupEnvFromProfile(options?: {
     persisted,
     goal:
       options?.goal ??
-      normalizeRecommendationGoal(processEnv.OPENCLAUDE_PROFILE_GOAL),
+      normalizeRecommendationGoal(processEnv.rashcode_PROFILE_GOAL),
     processEnv,
     getOllamaChatBaseUrl:
       options?.getOllamaChatBaseUrl ?? getOllamaChatBaseUrl,

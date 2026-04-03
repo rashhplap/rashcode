@@ -1,8 +1,8 @@
 /**
- * OpenClaude startup screen — filled-block text logo with sunset gradient.
+ * rashcode startup screen — filled-block text logo with sunset gradient.
  * Called once at CLI startup before the Ink UI renders.
  *
- * Addresses: https://github.com/Gitlawb/openclaude/issues/55
+ * Addresses: https://github.com/Rashhplap/rashcode/issues/55
  */
 
 declare const MACRO: { VERSION: string; DISPLAY_VERSION?: string }
@@ -67,7 +67,7 @@ const LOGO_OPEN = [
   `  \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u255d       \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u255d  \u255a\u2550\u2550\u255d`,
 ]
 
-const LOGO_CLAUDE = [
+const LOGO_RASH = [
   `  \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2557      \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2557   \u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557`,
   `  \u2588\u2588\u2554\u2550\u2550\u2550\u2550\u2550\u255d \u2588\u2588\u2551      \u2588\u2588\u2554\u2550\u2550\u2550\u2588\u2588\u2551 \u2588\u2588\u2551   \u2588\u2588\u2551 \u2588\u2588\u2554\u2550\u2550\u2550\u2588\u2588\u2551 \u2588\u2588\u2554\u2550\u2550\u2550\u2550\u2550\u255d`,
   `  \u2588\u2588\u2551       \u2588\u2588\u2551      \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551 \u2588\u2588\u2551   \u2588\u2588\u2551 \u2588\u2588\u2551   \u2588\u2588\u2551 \u2588\u2588\u2588\u2588\u2588\u2588\u2557  `,
@@ -79,9 +79,9 @@ const LOGO_CLAUDE = [
 // ─── Provider detection ───────────────────────────────────────────────────────
 
 function detectProvider(): { name: string; model: string; baseUrl: string; isLocal: boolean } {
-  const useGemini = process.env.CLAUDE_CODE_USE_GEMINI === '1' || process.env.CLAUDE_CODE_USE_GEMINI === 'true'
-  const useGithub = process.env.CLAUDE_CODE_USE_GITHUB === '1' || process.env.CLAUDE_CODE_USE_GITHUB === 'true'
-  const useOpenAI = process.env.CLAUDE_CODE_USE_OPENAI === '1' || process.env.CLAUDE_CODE_USE_OPENAI === 'true'
+  const useGemini = process.env.RASH_CODE_USE_GEMINI === '1' || process.env.RASH_CODE_USE_GEMINI === 'true'
+  const useGithub = process.env.RASH_CODE_USE_GITHUB === '1' || process.env.RASH_CODE_USE_GITHUB === 'true'
+  const useOpenAI = process.env.RASH_CODE_USE_OPENAI === '1' || process.env.RASH_CODE_USE_OPENAI === 'true'
 
   if (useGemini) {
     const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash'
@@ -139,7 +139,7 @@ function detectProvider(): { name: string; model: string; baseUrl: string; isLoc
   }
 
   // Default: Anthropic
-  const model = process.env.ANTHROPIC_MODEL || process.env.CLAUDE_MODEL || 'claude-sonnet-4-6'
+  const model = process.env.ANTHROPIC_MODEL || process.env.RASH_MODEL || 'rash-sonnet-4-6'
   return { name: 'Anthropic', model, baseUrl: 'https://api.anthropic.com', isLocal: false }
 }
 
@@ -163,7 +163,7 @@ export function printStartupScreen(): void {
   out.push('')
 
   // Gradient logo
-  const allLogo = [...LOGO_OPEN, '', ...LOGO_CLAUDE]
+  const allLogo = [...LOGO_OPEN, '', ...LOGO_RASH]
   const total = allLogo.length
   for (let i = 0; i < total; i++) {
     const t = total > 1 ? i / (total - 1) : 0
@@ -206,7 +206,7 @@ export function printStartupScreen(): void {
   out.push(boxRow(sRow, W, sLen))
 
   out.push(`${rgb(...BORDER)}\u255a${'\u2550'.repeat(W - 2)}\u255d${RESET}`)
-  out.push(`  ${DIM}${rgb(...DIMCOL)}openclaude ${RESET}${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET}`)
+  out.push(`  ${DIM}${rgb(...DIMCOL)}rashcode ${RESET}${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET}`)
   out.push('')
 
   process.stdout.write(out.join('\n') + '\n')

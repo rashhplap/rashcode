@@ -187,7 +187,7 @@ test('buildProfileSaveMessage maps provider fields without echoing secrets', () 
       OPENAI_MODEL: 'gpt-4o',
       OPENAI_BASE_URL: 'https://api.openai.com/v1',
     },
-    'D:/codings/Opensource/openclaude/.openclaude-profile.json',
+    'D:/codings/Opensource/rashcode/.rashcode-profile.json',
   )
 
   expect(message).toContain('Saved OpenAI-compatible profile.')
@@ -200,7 +200,7 @@ test('buildProfileSaveMessage maps provider fields without echoing secrets', () 
 test('buildCurrentProviderSummary redacts poisoned model and endpoint values', () => {
   const summary = buildCurrentProviderSummary({
     processEnv: {
-      CLAUDE_CODE_USE_OPENAI: '1',
+      RASH_CODE_USE_OPENAI: '1',
       OPENAI_API_KEY: 'sk-secret-12345678',
       OPENAI_MODEL: 'sk-secret-12345678',
       OPENAI_BASE_URL: 'sk-secret-12345678',

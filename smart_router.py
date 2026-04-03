@@ -1,7 +1,7 @@
 """
 smart_router.py
 ---------------
-Intelligent auto-router for openclaude.
+Intelligent auto-router for rashcode.
 
 Instead of always using one fixed provider, the smart router:
 - Pings all configured providers on startup
@@ -21,7 +21,7 @@ Usage in server.py:
     ROUTER_STRATEGY=latency    # or: cost, balanced
     ROUTER_FALLBACK=true       # auto-retry on failure
 
-Contribution to: https://github.com/Gitlawb/openclaude
+Contribution to: https://github.com/Rashhplap/rashcode
 """
 
 import asyncio
@@ -135,7 +135,7 @@ def build_default_providers() -> list[Provider]:
 
 class SmartRouter:
     """
-    Intelligently routes Claude Code API requests to the best
+    Intelligently routes Rash Code API requests to the best
     available LLM provider based on latency, cost, and health.
     """
 
@@ -230,14 +230,14 @@ class SmartRouter:
     def get_model_for_provider(
         self,
         provider: Provider,
-        claude_model: str,
+        rash_model: str,
         is_large_request: bool = False,
     ) -> str:
-        """Map a Claude model name to the provider's actual model."""
+        """Map a Rash model name to the provider's actual model."""
         if is_large_request:
             return provider.big_model
         is_large = any(
-            keyword in claude_model.lower()
+            keyword in rash_model.lower()
             for keyword in ["opus", "sonnet", "large", "big"]
         )
         return provider.big_model if is_large else provider.small_model
@@ -261,7 +261,7 @@ class SmartRouter:
     async def route(
         self,
         messages: list[dict],
-        claude_model: str = "claude-sonnet",
+        rash_model: str = "rash-sonnet",
         attempt: int = 0,
         exclude_providers: Optional[list[str]] = None,
     ) -> dict:
@@ -296,7 +296,7 @@ class SmartRouter:
         provider = min(available, key=lambda p: p.score(self.strategy))
         model = self.get_model_for_provider(
             provider,
-            claude_model,
+            rash_model,
             is_large_request=large,
         )
 

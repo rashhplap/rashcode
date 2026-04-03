@@ -96,7 +96,7 @@ export function EffortPicker({ onSelect, onCancel }: Props) {
 
   const supportsEffort = modelSupportsEffort(model)
   // For OpenAI/Codex, use the model's default reasoning effort as initial focus
-  // For Claude, use the displayed effort level or 'auto'
+  // For Rash, use the displayed effort level or 'auto'
   const initialFocus = usesOpenAIEffort
     ? (modelReasoningEffort || 'auto')
     : (appStateEffort ? String(appStateEffort) : 'auto')
@@ -109,7 +109,7 @@ export function EffortPicker({ onSelect, onCancel }: Props) {
           {usesOpenAIEffort
             ? `OpenAI/Codex provider (${provider})`
             : supportsEffort
-              ? `Claude model · ${provider} provider`
+              ? `Rash model · ${provider} provider`
               : `Effort not supported for this model`
           }
         </Text>

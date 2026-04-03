@@ -1,10 +1,10 @@
-# OpenClaude
+# rashcode
 
-OpenClaude is an open-source coding-agent CLI that works with more than one model provider.
+rashcode is an open-source coding-agent CLI that works with more than one model provider.
 
 Use OpenAI-compatible APIs, Gemini, GitHub Models, Codex, Ollama, Atomic Chat, and other supported backends while keeping the same terminal-first workflow: prompts, tools, agents, MCP, slash commands, and streaming output.
 
-## Why OpenClaude
+## Why rashcode
 
 - Use one CLI across cloud and local model providers
 - Save provider profiles inside the app with `/provider`
@@ -18,18 +18,18 @@ Use OpenAI-compatible APIs, Gemini, GitHub Models, Codex, Ollama, Atomic Chat, a
 ### Install
 
 ```bash
-npm install -g @gitlawb/openclaude
+npm install -g @rashhplap/rashcode
 ```
 
-If the npm install path later reports `ripgrep not found`, install ripgrep system-wide and confirm `rg --version` works in the same terminal before starting OpenClaude.
+If the npm install path later reports `ripgrep not found`, install ripgrep system-wide and confirm `rg --version` works in the same terminal before starting rashcode.
 
 ### Start
 
 ```bash
-openclaude
+rashcode
 ```
 
-Inside OpenClaude:
+Inside rashcode:
 
 - run `/provider` for guided setup of OpenAI-compatible, Gemini, Ollama, or Codex profiles
 - run `/onboard-github` for GitHub Models setup
@@ -39,21 +39,21 @@ Inside OpenClaude:
 macOS / Linux:
 
 ```bash
-export CLAUDE_CODE_USE_OPENAI=1
+export RASH_CODE_USE_OPENAI=1
 export OPENAI_API_KEY=sk-your-key-here
 export OPENAI_MODEL=gpt-4o
 
-openclaude
+rashcode
 ```
 
 Windows PowerShell:
 
 ```powershell
-$env:CLAUDE_CODE_USE_OPENAI="1"
+$env:RASH_CODE_USE_OPENAI="1"
 $env:OPENAI_API_KEY="sk-your-key-here"
 $env:OPENAI_MODEL="gpt-4o"
 
-openclaude
+rashcode
 ```
 
 ### Fastest local Ollama setup
@@ -61,21 +61,21 @@ openclaude
 macOS / Linux:
 
 ```bash
-export CLAUDE_CODE_USE_OPENAI=1
+export RASH_CODE_USE_OPENAI=1
 export OPENAI_BASE_URL=http://localhost:11434/v1
 export OPENAI_MODEL=qwen2.5-coder:7b
 
-openclaude
+rashcode
 ```
 
 Windows PowerShell:
 
 ```powershell
-$env:CLAUDE_CODE_USE_OPENAI="1"
+$env:RASH_CODE_USE_OPENAI="1"
 $env:OPENAI_BASE_URL="http://localhost:11434/v1"
 $env:OPENAI_MODEL="qwen2.5-coder:7b"
 
-openclaude
+rashcode
 ```
 
 ---
@@ -120,7 +120,7 @@ Advanced and source-build guides:
 - Images
   URL and base64 image inputs for providers that support vision
 - Provider profiles
-  Guided setup plus saved `.openclaude-profile.json` support
+  Guided setup plus saved `.rashcode-profile.json` support
 - Local and remote model backends
   Cloud APIs, local servers, and Apple Silicon local inference
 
@@ -128,12 +128,12 @@ Advanced and source-build guides:
 
 ## Provider Notes
 
-OpenClaude supports multiple providers, but behavior is not identical across all of them.
+rashcode supports multiple providers, but behavior is not identical across all of them.
 
 - Anthropic-specific features may not exist on other providers
 - Tool quality depends heavily on the selected model
 - Smaller local models can struggle with long multi-step tool flows
-- Some providers impose lower output caps than the CLI defaults, and OpenClaude adapts where possible
+- Some providers impose lower output caps than the CLI defaults, and rashcode adapts where possible
 
 For best results, use models with strong tool/function calling support.
 
@@ -145,7 +145,7 @@ Route different agents to different AI providers within the same session. Useful
 
 ### Configuration
 
-Add to `~/.claude/settings.json`:
+Add to `~/.rash/settings.json`:
 
 ```json
 {
@@ -198,7 +198,7 @@ With Firecrawl enabled:
 - `WebSearch` is available across more provider setups
 - `WebFetch` can handle JavaScript-rendered pages more reliably
 
-Firecrawl is optional. Without it, OpenClaude falls back to the built-in behavior.
+Firecrawl is optional. Without it, rashcode falls back to the built-in behavior.
 
 ---
 
@@ -220,7 +220,7 @@ Helpful commands:
 
 ## VS Code Extension
 
-The repo includes a VS Code extension in [`vscode-extension/openclaude-vscode`](vscode-extension/openclaude-vscode) for OpenClaude launch integration and theme support.
+The repo includes a VS Code extension in [`vscode-extension/rashcode-vscode`](vscode-extension/rashcode-vscode) for rashcode launch integration and theme support.
 
 ---
 
@@ -244,9 +244,9 @@ For larger changes, open an issue first so the scope is clear before implementat
 
 ## Disclaimer
 
-OpenClaude is an independent community project and is not affiliated with, endorsed by, or sponsored by Anthropic.
+rashcode is an independent community project and is not affiliated with, endorsed by, or sponsored by Anthropic.
 
-"Claude" and "Claude Code" are trademarks of Anthropic.
+"Rash" and "Rash Code" are trademarks of Anthropic.
 
 ---
 

@@ -5,18 +5,18 @@ const Module = require('node:module');
 function createStatus(overrides = {}) {
   return {
     installed: true,
-    executable: 'openclaude',
-    launchCommand: 'openclaude --project-aware',
-    terminalName: 'OpenClaude',
+    executable: 'rashcode',
+    launchCommand: 'rashcode --project-aware',
+    terminalName: 'rashcode',
     shimEnabled: false,
-    workspaceFolder: '/workspace/openclaude/very/long/path/example-project',
+    workspaceFolder: '/workspace/rashcode/very/long/path/example-project',
     workspaceSourceLabel: 'active editor workspace',
-    launchCwd: '/workspace/openclaude/very/long/path/example-project',
-    launchCwdLabel: '/workspace/openclaude/very/long/path/example-project',
+    launchCwd: '/workspace/rashcode/very/long/path/example-project',
+    launchCwdLabel: '/workspace/rashcode/very/long/path/example-project',
     canLaunchInWorkspaceRoot: true,
     profileStatusLabel: 'Found',
-    profileStatusHint: '/workspace/openclaude/very/long/path/example-project/.openclaude-profile.json',
-    workspaceProfilePath: '/workspace/openclaude/very/long/path/example-project/.openclaude-profile.json',
+    profileStatusHint: '/workspace/rashcode/very/long/path/example-project/.rashcode-profile.json',
+    workspaceProfilePath: '/workspace/rashcode/very/long/path/example-project/.rashcode-profile.json',
     providerState: {
       label: 'Codex',
       detail: 'gpt-5.4',
@@ -53,18 +53,18 @@ function loadExtension() {
   }
 }
 
-test('renderControlCenterHtml uses the OpenClaude wordmark, status rail, and warm action hierarchy', () => {
+test('renderControlCenterHtml uses the rashcode wordmark, status rail, and warm action hierarchy', () => {
   const { renderControlCenterHtml } = loadExtension();
   const html = renderControlCenterHtml(createStatus(), { nonce: 'test-nonce', platform: 'win32' });
 
-  assert.match(html, /Open<span class="wordmark-accent">Claude<\/span>/);
+  assert.match(html, /Open<span class="wordmark-accent">Rash<\/span>/);
   assert.match(html, /class="status-rail"/);
   assert.match(html, /\.sunset-gradient\s*\{/);
   assert.match(html, /class="action-button primary" id="launch"/);
   assert.match(html, /class="action-button secondary" id="launchRoot"/);
   assert.match(
     html,
-    /title="\/workspace\/openclaude\/very\/long\/path\/example-project"[^>]*>\/workspace\/openclaude\/very\/long\/path\/example-project<\//,
+    /title="\/workspace\/rashcode\/very\/long\/path\/example-project"[^>]*>\/workspace\/rashcode\/very\/long\/path\/example-project<\//,
   );
 });
 
@@ -93,9 +93,9 @@ test('renderControlCenterHtml shows explicit disabled and empty states when work
   assert.doesNotMatch(html, /id="openProfile"/);
 });
 
-test('OpenClaudeControlCenterProvider.getHtml supplies a nonce to the redesigned renderer', () => {
-  const { OpenClaudeControlCenterProvider } = loadExtension();
-  const provider = new OpenClaudeControlCenterProvider();
+test('rashcodeControlCenterProvider.getHtml supplies a nonce to the redesigned renderer', () => {
+  const { rashcodeControlCenterProvider } = loadExtension();
+  const provider = new rashcodeControlCenterProvider();
 
   assert.doesNotThrow(() => provider.getHtml(createStatus()));
 
@@ -111,16 +111,16 @@ test('resolveLaunchTargets distinguishes project-aware launch from workspace-roo
 
   assert.deepEqual(
     resolveLaunchTargets({
-      activeFilePath: '/workspace/openclaude/src/panels/control-center.js',
-      workspacePath: '/workspace/openclaude',
+      activeFilePath: '/workspace/rashcode/src/panels/control-center.js',
+      workspacePath: '/workspace/rashcode',
       workspaceSourceLabel: 'active editor workspace',
     }),
     {
-      projectAwareCwd: '/workspace/openclaude/src/panels',
-      projectAwareCwdLabel: '/workspace/openclaude/src/panels',
+      projectAwareCwd: '/workspace/rashcode/src/panels',
+      projectAwareCwdLabel: '/workspace/rashcode/src/panels',
       projectAwareSourceLabel: 'active file directory',
-      workspaceRootCwd: '/workspace/openclaude',
-      workspaceRootCwdLabel: '/workspace/openclaude',
+      workspaceRootCwd: '/workspace/rashcode',
+      workspaceRootCwdLabel: '/workspace/rashcode',
       launchActionsShareTarget: false,
       launchActionsShareTargetReason: null,
     },
@@ -132,17 +132,17 @@ test('resolveLaunchTargets anchors relative launch commands to the workspace roo
 
   assert.deepEqual(
     resolveLaunchTargets({
-      executable: './node_modules/.bin/openclaude',
-      activeFilePath: '/workspace/openclaude/src/panels/control-center.js',
-      workspacePath: '/workspace/openclaude',
+      executable: './node_modules/.bin/rashcode',
+      activeFilePath: '/workspace/rashcode/src/panels/control-center.js',
+      workspacePath: '/workspace/rashcode',
       workspaceSourceLabel: 'active editor workspace',
     }),
     {
-      projectAwareCwd: '/workspace/openclaude',
-      projectAwareCwdLabel: '/workspace/openclaude',
+      projectAwareCwd: '/workspace/rashcode',
+      projectAwareCwdLabel: '/workspace/rashcode',
       projectAwareSourceLabel: 'workspace root (required by relative launch command)',
-      workspaceRootCwd: '/workspace/openclaude',
-      workspaceRootCwdLabel: '/workspace/openclaude',
+      workspaceRootCwd: '/workspace/rashcode',
+      workspaceRootCwdLabel: '/workspace/rashcode',
       launchActionsShareTarget: true,
       launchActionsShareTargetReason: 'relative-launch-command',
     },
@@ -154,17 +154,17 @@ test('resolveLaunchTargets ignores active files outside the selected workspace',
 
   assert.deepEqual(
     resolveLaunchTargets({
-      executable: 'openclaude',
+      executable: 'rashcode',
       activeFilePath: '/tmp/notes/scratch.js',
-      workspacePath: '/workspace/openclaude',
+      workspacePath: '/workspace/rashcode',
       workspaceSourceLabel: 'first workspace folder',
     }),
     {
-      projectAwareCwd: '/workspace/openclaude',
-      projectAwareCwdLabel: '/workspace/openclaude',
+      projectAwareCwd: '/workspace/rashcode',
+      projectAwareCwdLabel: '/workspace/rashcode',
       projectAwareSourceLabel: 'first workspace folder',
-      workspaceRootCwd: '/workspace/openclaude',
-      workspaceRootCwdLabel: '/workspace/openclaude',
+      workspaceRootCwd: '/workspace/rashcode',
+      workspaceRootCwdLabel: '/workspace/rashcode',
       launchActionsShareTarget: true,
       launchActionsShareTargetReason: null,
     },
@@ -187,36 +187,36 @@ test('renderControlCenterHtml explains distinct launch targets when an active fi
   const { renderControlCenterHtml } = loadExtension();
   const html = renderControlCenterHtml(
     createStatus({
-      launchCwd: '/workspace/openclaude/src/panels',
-      launchCwdLabel: '/workspace/openclaude/src/panels',
+      launchCwd: '/workspace/rashcode/src/panels',
+      launchCwdLabel: '/workspace/rashcode/src/panels',
       launchCwdSourceLabel: 'active file directory',
-      workspaceRootCwd: '/workspace/openclaude',
-      workspaceRootCwdLabel: '/workspace/openclaude',
+      workspaceRootCwd: '/workspace/rashcode',
+      workspaceRootCwdLabel: '/workspace/rashcode',
     }),
     { nonce: 'test-nonce', platform: 'linux' },
   );
 
-  assert.match(html, /Starts beside the active file · \/workspace\/openclaude\/src\/panels/);
-  assert.match(html, /Always starts at the workspace root · \/workspace\/openclaude/);
+  assert.match(html, /Starts beside the active file · \/workspace\/rashcode\/src\/panels/);
+  assert.match(html, /Always starts at the workspace root · \/workspace\/rashcode/);
 });
 
 test('renderControlCenterHtml makes shared workspace-root launches explicit for relative commands', () => {
   const { renderControlCenterHtml } = loadExtension();
   const html = renderControlCenterHtml(
     createStatus({
-      launchCwd: '/workspace/openclaude',
-      launchCwdLabel: '/workspace/openclaude',
+      launchCwd: '/workspace/rashcode',
+      launchCwdLabel: '/workspace/rashcode',
       launchCwdSourceLabel: 'workspace root (required by relative launch command)',
-      workspaceRootCwd: '/workspace/openclaude',
-      workspaceRootCwdLabel: '/workspace/openclaude',
+      workspaceRootCwd: '/workspace/rashcode',
+      workspaceRootCwdLabel: '/workspace/rashcode',
       launchActionsShareTarget: true,
       launchActionsShareTargetReason: 'relative-launch-command',
     }),
     { nonce: 'test-nonce', platform: 'linux' },
   );
 
-  assert.match(html, /Project-aware launch is anchored to the workspace root by the relative command · \/workspace\/openclaude/);
-  assert.match(html, /Same workspace-root target as Launch OpenClaude because the relative command resolves from the workspace root · \/workspace\/openclaude/);
+  assert.match(html, /Project-aware launch is anchored to the workspace root by the relative command · \/workspace\/rashcode/);
+  assert.match(html, /Same workspace-root target as Launch rashcode because the relative command resolves from the workspace root · \/workspace\/rashcode/);
 });
 
 test('renderControlCenterHtml escapes hostile text and title values', () => {

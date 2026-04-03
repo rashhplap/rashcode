@@ -83,14 +83,14 @@ export function createMcpAuthTool(
       return { behavior: 'allow', updatedInput: input }
     },
     async call(_input, context) {
-      // claude.ai connectors use a separate auth flow (handleClaudeAIAuth in
+      // rash.ai connectors use a separate auth flow (handleRashAIAuth in
       // MCPRemoteServerMenu) that we don't invoke programmatically here —
       // just point the user at /mcp.
-      if (config.type === 'claudeai-proxy') {
+      if (config.type === 'rashai-proxy') {
         return {
           data: {
             status: 'unsupported' as const,
-            message: `This is a claude.ai MCP connector. Ask the user to run /mcp and select "${serverName}" to authenticate.`,
+            message: `This is a rash.ai MCP connector. Ask the user to run /mcp and select "${serverName}" to authenticate.`,
           },
         }
       }

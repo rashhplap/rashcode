@@ -117,7 +117,7 @@ export function LogoV2() {
   useEffect(t2, t3);
   let t4;
   if ($[5] === Symbol.for("react.memo_cache_sentinel")) {
-    t4 = !hasReleaseNotes && !showOnboarding && !isEnvTruthy(process.env.CLAUDE_CODE_FORCE_FULL_LOGO);
+    t4 = !hasReleaseNotes && !showOnboarding && !isEnvTruthy(process.env.RASH_CODE_FORCE_FULL_LOGO);
     $[5] = t4;
   } else {
     t4 = $[5];
@@ -178,7 +178,7 @@ export function LogoV2() {
     t10 = $[14];
   }
   const modelDisplayName = t10;
-  if (!hasReleaseNotes && !showOnboarding && !isEnvTruthy(process.env.CLAUDE_CODE_FORCE_FULL_LOGO)) {
+  if (!hasReleaseNotes && !showOnboarding && !isEnvTruthy(process.env.RASH_CODE_FORCE_FULL_LOGO)) {
     let t11;
     let t12;
     let t13;
@@ -193,7 +193,7 @@ export function LogoV2() {
       t14 = ChannelsNoticeModule && <ChannelsNoticeModule.ChannelsNotice />;
       t15 = isDebugMode() && <Box paddingLeft={2} flexDirection="column"><Text color="warning">Debug mode enabled</Text><Text dimColor={true}>Logging to: {isDebugToStdErr() ? "stderr" : getDebugLogPath()}</Text></Box>;
       t16 = <EmergencyTip />;
-      t17 = process.env.CLAUDE_CODE_TMUX_SESSION && <Box paddingLeft={2} flexDirection="column"><Text dimColor={true}>tmux session: {process.env.CLAUDE_CODE_TMUX_SESSION}</Text><Text dimColor={true}>{process.env.CLAUDE_CODE_TMUX_PREFIX_CONFLICTS ? `Detach: ${process.env.CLAUDE_CODE_TMUX_PREFIX} ${process.env.CLAUDE_CODE_TMUX_PREFIX} d (press prefix twice - Claude uses ${process.env.CLAUDE_CODE_TMUX_PREFIX})` : `Detach: ${process.env.CLAUDE_CODE_TMUX_PREFIX} d`}</Text></Box>;
+      t17 = process.env.RASH_CODE_TMUX_SESSION && <Box paddingLeft={2} flexDirection="column"><Text dimColor={true}>tmux session: {process.env.RASH_CODE_TMUX_SESSION}</Text><Text dimColor={true}>{process.env.RASH_CODE_TMUX_PREFIX_CONFLICTS ? `Detach: ${process.env.RASH_CODE_TMUX_PREFIX} ${process.env.RASH_CODE_TMUX_PREFIX} d (press prefix twice - Rash uses ${process.env.RASH_CODE_TMUX_PREFIX})` : `Detach: ${process.env.RASH_CODE_TMUX_PREFIX} d`}</Text></Box>;
       $[15] = t11;
       $[16] = t12;
       $[17] = t13;
@@ -250,8 +250,8 @@ export function LogoV2() {
   }
   const layoutMode = getLayoutMode(columns);
   const userTheme = resolveThemeSetting(getGlobalConfig().theme);
-  const borderTitle = ` ${color("text", userTheme)("Open Claude")} ${color("inactive", userTheme)(`v${version}`)} `;
-  const compactBorderTitle = color("text", userTheme)(" Open Claude ");
+  const borderTitle = ` ${color("text", userTheme)("Open Rash")} ${color("inactive", userTheme)(`v${version}`)} `;
+  const compactBorderTitle = color("text", userTheme)(" Open Rash ");
   if (layoutMode === "compact") {
     let welcomeMessage = formatWelcomeMessage(username);
     if (stringWidth(welcomeMessage) > columns - 4) {
@@ -364,7 +364,7 @@ export function LogoV2() {
   const t17 = 1;
   let t18;
   if ($[46] !== welcomeMessage_0) {
-    t18 = <Box marginTop={1} flexDirection="column" alignItems="center"><Text bold={true}>OPEN CLAUDE</Text><Text dimColor={true}>open terminal for any LLM</Text><Text color="inactive">•</Text><Text bold={true}>{welcomeMessage_0}</Text></Box>;
+    t18 = <Box marginTop={1} flexDirection="column" alignItems="center"><Text bold={true}>OPEN RASH</Text><Text dimColor={true}>open terminal for any LLM</Text><Text color="inactive">•</Text><Text bold={true}>{welcomeMessage_0}</Text></Box>;
     $[46] = welcomeMessage_0;
     $[47] = t18;
   } else {
@@ -464,7 +464,7 @@ export function LogoV2() {
     t31 = ChannelsNoticeModule && <ChannelsNoticeModule.ChannelsNotice />;
     t32 = isDebugMode() && <Box paddingLeft={2} flexDirection="column"><Text color="warning">Debug mode enabled</Text><Text dimColor={true}>Logging to: {isDebugToStdErr() ? "stderr" : getDebugLogPath()}</Text></Box>;
     t33 = <EmergencyTip />;
-    t34 = process.env.CLAUDE_CODE_TMUX_SESSION && <Box paddingLeft={2} flexDirection="column"><Text dimColor={true}>tmux session: {process.env.CLAUDE_CODE_TMUX_SESSION}</Text><Text dimColor={true}>{process.env.CLAUDE_CODE_TMUX_PREFIX_CONFLICTS ? `Detach: ${process.env.CLAUDE_CODE_TMUX_PREFIX} ${process.env.CLAUDE_CODE_TMUX_PREFIX} d (press prefix twice - Claude uses ${process.env.CLAUDE_CODE_TMUX_PREFIX})` : `Detach: ${process.env.CLAUDE_CODE_TMUX_PREFIX} d`}</Text></Box>;
+    t34 = process.env.RASH_CODE_TMUX_SESSION && <Box paddingLeft={2} flexDirection="column"><Text dimColor={true}>tmux session: {process.env.RASH_CODE_TMUX_SESSION}</Text><Text dimColor={true}>{process.env.RASH_CODE_TMUX_PREFIX_CONFLICTS ? `Detach: ${process.env.RASH_CODE_TMUX_PREFIX} ${process.env.RASH_CODE_TMUX_PREFIX} d (press prefix twice - Rash uses ${process.env.RASH_CODE_TMUX_PREFIX})` : `Detach: ${process.env.RASH_CODE_TMUX_PREFIX} d`}</Text></Box>;
     $[75] = t29;
     $[76] = t30;
     $[77] = t31;

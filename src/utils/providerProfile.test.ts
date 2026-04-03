@@ -31,7 +31,7 @@ function profile(profile: ProfileFile['profile'], env: ProfileFile['env']): Prof
   }
 }
 
-const missingCodexAuthPath = join(tmpdir(), 'openclaude-missing-codex-auth.json')
+const missingCodexAuthPath = join(tmpdir(), 'rashcode-missing-codex-auth.json')
 
 test('matching persisted ollama env is reused for ollama launch', async () => {
   const env = await buildLaunchEnv({
@@ -149,8 +149,8 @@ test('matching persisted gemini env is reused for gemini launch', async () => {
     processEnv: {},
   })
 
-  assert.equal(env.CLAUDE_CODE_USE_GEMINI, '1')
-  assert.equal(env.CLAUDE_CODE_USE_OPENAI, undefined)
+  assert.equal(env.RASH_CODE_USE_GEMINI, '1')
+  assert.equal(env.RASH_CODE_USE_OPENAI, undefined)
   assert.equal(env.GEMINI_MODEL, 'gemini-2.5-flash')
   assert.equal(env.GEMINI_API_KEY, 'gem-persisted')
   assert.equal(env.GEMINI_BASE_URL, 'https://example.test/v1beta/openai')
@@ -173,12 +173,12 @@ test('gemini launch ignores mismatched persisted openai env and strips other pro
       OPENAI_MODEL: 'gpt-4o-mini',
       CODEX_API_KEY: 'codex-live',
       CHATGPT_ACCOUNT_ID: 'acct_live',
-      CLAUDE_CODE_USE_OPENAI: '1',
+      RASH_CODE_USE_OPENAI: '1',
     },
   })
 
-  assert.equal(env.CLAUDE_CODE_USE_GEMINI, '1')
-  assert.equal(env.CLAUDE_CODE_USE_OPENAI, undefined)
+  assert.equal(env.RASH_CODE_USE_GEMINI, '1')
+  assert.equal(env.RASH_CODE_USE_OPENAI, undefined)
   assert.equal(env.GEMINI_MODEL, 'gemini-2.0-flash')
   assert.equal(env.GEMINI_API_KEY, 'gem-live')
   assert.equal(
@@ -276,7 +276,7 @@ test('codex launch ignores placeholder codex env keys', async () => {
 })
 
 test('codex launch prefers auth account id over stale persisted value', async () => {
-  const codexHome = mkdtempSync(join(tmpdir(), 'openclaude-codex-'))
+  const codexHome = mkdtempSync(join(tmpdir(), 'rashcode-codex-'))
   try {
     writeFileSync(
       join(codexHome, 'auth.json'),
@@ -369,7 +369,7 @@ test('gemini profiles require a key', () => {
 })
 
 test('saveProfileFile writes a profile that loadProfileFile can read back', () => {
-  const cwd = mkdtempSync(join(tmpdir(), 'openclaude-profile-file-'))
+  const cwd = mkdtempSync(join(tmpdir(), 'rashcode-profile-file-'))
 
   try {
     const persisted = createProfileFile('openai', {
@@ -399,15 +399,15 @@ test('buildStartupEnvFromProfile applies persisted gemini settings when no provi
     processEnv: {},
   })
 
-  assert.equal(env.CLAUDE_CODE_USE_GEMINI, '1')
-  assert.equal(env.CLAUDE_CODE_USE_OPENAI, undefined)
+  assert.equal(env.RASH_CODE_USE_GEMINI, '1')
+  assert.equal(env.RASH_CODE_USE_OPENAI, undefined)
   assert.equal(env.GEMINI_API_KEY, 'gem-test')
   assert.equal(env.GEMINI_MODEL, 'gemini-2.5-flash')
 })
 
 test('buildStartupEnvFromProfile leaves explicit provider selections untouched', async () => {
   const processEnv = {
-    CLAUDE_CODE_USE_GEMINI: '1',
+    RASH_CODE_USE_GEMINI: '1',
     GEMINI_API_KEY: 'gem-live',
     GEMINI_MODEL: 'gemini-2.0-flash',
   }
@@ -421,13 +421,13 @@ test('buildStartupEnvFromProfile leaves explicit provider selections untouched',
   })
 
   assert.equal(env, processEnv)
-  assert.equal(env.CLAUDE_CODE_USE_GEMINI, '1')
+  assert.equal(env.RASH_CODE_USE_GEMINI, '1')
   assert.equal(env.OPENAI_API_KEY, undefined)
 })
 
 test('buildStartupEnvFromProfile treats explicit falsey provider flags as user intent', async () => {
   const processEnv = {
-    CLAUDE_CODE_USE_OPENAI: '0',
+    RASH_CODE_USE_OPENAI: '0',
   }
 
   const env = await buildStartupEnvFromProfile({
@@ -439,7 +439,7 @@ test('buildStartupEnvFromProfile treats explicit falsey provider flags as user i
   })
 
   assert.equal(env, processEnv)
-  assert.equal(env.CLAUDE_CODE_USE_OPENAI, '0')
+  assert.equal(env.RASH_CODE_USE_OPENAI, '0')
   assert.equal(env.GEMINI_API_KEY, undefined)
 })
 
@@ -520,7 +520,7 @@ test('startup env ignores poisoned persisted openai model and base url', async (
     processEnv: {},
   })
 
-  assert.equal(env.CLAUDE_CODE_USE_OPENAI, '1')
+  assert.equal(env.RASH_CODE_USE_OPENAI, '1')
   assert.equal(env.OPENAI_API_KEY, 'sk-live')
   assert.equal(env.OPENAI_MODEL, 'gpt-4o')
   assert.equal(env.OPENAI_BASE_URL, 'https://api.openai.com/v1')
